@@ -1,0 +1,6 @@
+-- requète pour avoir les ingredients d'une pizza
+SELECT Ingredient.nom
+FROM Ingredient
+INNER JOIN IngredientPizza ON IngredientPizza.ingredient_id=Ingredient.id
+INNER JOIN Pizza ON Pizza.id=IngredientPizza.pizza_id
+WHERE Pizza.id = 5;

@@ -1,0 +1,75 @@
+INSERT INTO Ingredient (nom) VALUES ('sauce tomate');
+INSERT INTO Ingredient (nom) VALUES ('mozzarella');
+INSERT INTO Ingredient (nom) VALUES ('olives noires');
+INSERT INTO Ingredient (nom) VALUES ('roquette');
+INSERT INTO Ingredient (nom) VALUES ('anchois');
+INSERT INTO Ingredient (nom) VALUES ('câpres');
+INSERT INTO Ingredient (nom) VALUES ('jambon');
+INSERT INTO Ingredient (nom) VALUES ('champignons');
+INSERT INTO Ingredient (nom) VALUES ('artichauds marinés');
+INSERT INTO Ingredient (nom) VALUES ('chorizo');
+INSERT INTO Ingredient (nom) VALUES ('merguez');
+INSERT INTO Ingredient (nom) VALUES ('oignons rouges');
+INSERT INTO Ingredient (nom) VALUES ('piments vinaigrés');
+INSERT INTO Ingredient (nom) VALUES ('viandes hachées');
+INSERT INTO Ingredient (nom) VALUES ('boursin');
+INSERT INTO Ingredient (nom) VALUES ('chèvre');
+INSERT INTO Ingredient (nom) VALUES ('bleu');
+INSERT INTO Ingredient (nom) VALUES ('raclette');
+INSERT INTO Ingredient (nom) VALUES ('emmental');
+
+INSERT INTO Pizza (nom, prix) VALUES ('margharita', 11.90);
+INSERT INTO Pizza (nom, prix) VALUES ('napolitaine', 12.90);
+INSERT INTO Pizza (nom, prix) VALUES ('quattro staggioni', 13.90);
+INSERT INTO Pizza (nom, prix) VALUES ('matador', 13.90);
+INSERT INTO Pizza (nom, prix) VALUES ('boursin', 13.90);
+INSERT INTO Pizza (nom, prix) VALUES ('regina', 13.90);
+INSERT INTO Pizza (nom, prix) VALUES ('5 fromages', 13.90);
+
+INSERT INTO Client (nom, prenom, e_mail, numero_telephone, mot_de_passe)
+VALUES ('Banane', 'Jonas', 'j.banane@hotmail.fr', '0601020304', 'banane93');
+INSERT INTO Client (nom, prenom, e_mail, numero_telephone, mot_de_passe)
+VALUES ('Zuki', 'Mika', 'm.zuki@hotmail.fr', '0612345678', 'pgmdu77.');
+
+INSERT INTO Restaurant (nom, adresse_voie, adresse_code_postal, adresse_ville) VALUES ('OC pizza Nord', '12 rue du Général Leclerc', '75008', 'Paris');
+INSERT INTO Restaurant (nom, adresse_voie, adresse_code_postal, adresse_ville) VALUES ('OC pizza Sud', '5 rue Geronimo', '75014', 'Paris');
+INSERT INTO Restaurant (nom, adresse_voie, adresse_code_postal, adresse_ville) VALUES ('OC pizza Est', '8 rue des jardins', '75020', 'Paris');
+INSERT INTO Restaurant (nom, adresse_voie, adresse_code_postal, adresse_ville) VALUES ('OC pizza Ouest', '20 rue de la Reine', '75006', 'Paris');
+
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (1, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (1, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (1, 3);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (1, 4);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (2, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (2, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (2, 3);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (2, 5);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (2, 6);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (3, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (3, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (3, 7);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (3, 8);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (3, 9);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (3, 3);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (4, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (4, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (4, 10);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (4, 11);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (4, 12);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (4, 13);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (5, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (5, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (5, 14);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (5, 8);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (5, 12);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (5, 15);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (6, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (6, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (6, 7);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (6, 8);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (7, 1);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (7, 2);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (7, 16);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (7, 17);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (7, 18);
+INSERT INTO IngredientPizza (pizza_id, ingredient_id) VALUES (7, 19);
