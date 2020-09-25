@@ -68,45 +68,45 @@ CREATE TABLE Ingredient (
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE CommandeWeb (
+CREATE TABLE Commande (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     date_commande DATETIME NOT NULL,
     statut ENUM('en_attente', 'en_preparation', 'preparee', 'en_livraison', 'livree', 'servi') NOT NULL,
     prix_total DECIMAL(5, 2) NOT NULL,
+    type ENUM("sur_place", "en_ligne")
     PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE CommandeWeb (
+    parent_id INT UNSIGNED NOT NULL,
+    adresse_id INT UNSIGNED NOT NULL,
+    client_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (parent_id),
+    FOREIGN KEY (parent_id) REFERENCES Commande(id),
+    FOREIGN KEY (adresse_id) REFERENCES Adresse(id),
+    FOREIGN KEY (client_id) REFERENCES Client(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE CommandeSurPlace (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    date_commande DATETIME NOT NULL,
-    statut ENUM('en_attente', 'en_preparation', 'preparee', 'en_livraison', 'livree', 'servi') NOT NULL,
-    prix_total DECIMAL(5, 2) NOT NULL,
-    PRIMARY KEY (id)
+    parent_id INT UNSIGNED NOT NULL,
+    employe_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (parent_id),
+    FOREIGN KEY (parent_id) REFERENCES Commande(id),
+    FOREIGN KEY (employe_id) REFERENCES Employe(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE DetailCommandeWeb (
+CREATE TABLE DetailCommande (
     pizza_id INT UNSIGNED NOT NULL,
-    commande_web_id INT UNSIGNED NOT NULL,
+    commande_id INT UNSIGNED NOT NULL,
     quantite INT NOT NULL,
     taille ENUM('S', 'M', 'L') NOT NULL,
     prix DECIMAL(5,2) NOT NULL,
     PRIMARY KEY (pizza_id, commande_web_id),
     FOREIGN KEY (pizza_id) REFERENCES Pizza(id),
-    FOREIGN KEY (commande_web_id) REFERENCES CommandeWeb(id)
-    )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE DetailCommandeSurPlace (
-    pizza_id INT UNSIGNED NOT NULL,
-    commande_sur_place_id INT UNSIGNED NOT NULL,
-    quantite INT NOT NULL,
-    taille ENUM('S', 'M', 'L') NOT NULL,
-    prix DECIMAL(5,2) NOT NULL,
-    PRIMARY KEY (pizza_id, commande_sur_place_id),
-    FOREIGN KEY (pizza_id) REFERENCES Pizza(id),
-    FOREIGN KEY (commande_sur_place_id) REFERENCES CommandeSurPlace(id)
+    FOREIGN KEY (commande_id) REFERENCES Commande(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
