@@ -14,22 +14,26 @@ CREATE  TABLE Client (
 
 CREATE  TABLE Employe (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    restaurant_id INT UNSIGNED NOT NULL,
     civilite ENUM('M', 'Mme') NOT NULL,
     nom VARCHAR(50) NOT NULL,
     prenom VARCHAR(50) NOT NULL,
     numero_telephone VARCHAR(20) NOT NULL,
     grade ENUM('manager', 'cuisinier', 'serveur', 'livreur') NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Adresse (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    client_id UNSIGNED NOT NULL,
     voie VARCHAR(50) NOT NULL,
     complement_adresse VARCHAR(50),
     code_postal VARCHAR(10) NOT NULL,
     ville VARCHAR(50) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (client_id) REFERENCES Client(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -70,11 +74,15 @@ CREATE TABLE Ingredient (
 
 CREATE TABLE Commande (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    restaurant_id INT UNSIGNED NOT NULL,
+    paiement_id INT UNSIGNED,
     date_commande DATETIME NOT NULL,
     statut ENUM('en_attente', 'en_preparation', 'preparee', 'en_livraison', 'livree', 'servi') NOT NULL,
     prix_total DECIMAL(5, 2) NOT NULL,
     type ENUM("sur_place", "en_ligne")
     PRIMARY KEY (id)
+    FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id),
+    FOREIGN KEY (paiement_id) REFERENCES Paiement(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

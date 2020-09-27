@@ -21,9 +21,10 @@ VALUES ('OC pizza Nord', '12 rue du Général Leclerc', '75008', 'Paris'),
 ('OC pizza Est', '8 rue des jardins', '75020', 'Paris'),
 ('OC pizza Ouest', '20 rue de la Reine', '75006', 'Paris');
 
-INSERT INTO Adresse (voie, code_postal, ville)
+INSERT INTO Adresse (client_id, voie, code_postal, ville)
 VALUES ('20 rue de la maison verte', 75008, 'Paris'),
-('5 rue de la Vallée', 75014, "Paris"), ('9 avenue des Poirreaux', 75020, 'Paris');
+('5 rue de la Vallée', 75014, "Paris"),
+('9 avenue des Poirreaux', 75020, 'Paris');
 
 INSERT INTO Employe (civilite, nom, prenom, numero_telephone, grade)
 VALUES ('Mme', 'Jardin', 'Anais', '0627954368', 'serveur'),
@@ -58,3 +59,14 @@ VALUES (1, 1, 100, 'bouteille'), (1, 2, 100, 'paquet'), (1, 3, 80, 'boite'), (1,
 (4, 5, 70, 'boite'), (4, 6, 50, 'boite'), (4, 7, 250, 'paquet'), (4, 8, 250, 'boite'), (4, 9, 70, 'boite'),
 (4, 10, 100, 'paquet'), (4, 11, 100, 'paquet'), (4, 12, 100, 'sachet'), (4, 13, 70, 'boite'), (4, 14, 60, 'paquet'),
 (4, 15, 40, 'paquet'), (4, 16, 300, 'paquet'), (4, 17, 300, 'paquet'), (4, 18, 300, 'paquet'), (4, 19, 300, 'paquet');
+
+INSERT INTO Commande (restaurant_id, date_commande, statut, prix_total, type, paiement_id)
+VALUES (3,'2020-09-27 11:50:00', 'en_preparation', '25,8', 'sur_place', NULL),
+(1, '2020-09-27 12:30:00', 'en_livraison', '27,8', 'en_ligne', 1),
+(2, '2020-09-27 12:45:00', 'livree', '13,90', 'en ligne', 2);
+
+INSERT INTO CommandeSurPlace (parent_id, employe_id)
+VALUES (1, 1)
+
+INSERT INTO CommandeWeb (parent_id, adresse_id, client_id)
+VALUES (2, )
