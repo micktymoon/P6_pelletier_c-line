@@ -1,19 +1,12 @@
-INSERT INTO Ingredient (nom, unite)
-VALUES ('sauce tomate', 'centilitre'), ('mozzarella', 'gramme'), ('olives noires', 'unite'), ('roquette', 'gramme'),
-('anchois', 'gramme'), ('câpres', 'gramme'), ('jambon', 'unite'), ('champignons', 'gramme'), ('artichauds marinés', 'gramme'),
-('chorizo', 'unite'), ('merguez', 'unite'), ('oignons rouges', 'unite'), ('piments vinaigrés', 'gramme'),
-('viandes hachées', 'gramme'), ('boursin', 'gramme'), ('chèvre', 'gramme'), ('bleu', 'gramme'), ('raclette', 'gramme'), ('emmental', 'gramme');
-
-INSERT INTO Pizza (nom, prix)
-VALUES ('margharita', 11.90), ('napolitaine', 12.90),
-('quattro staggioni', 13.90), ('matador', 13.90),
-('boursin', 13.90), ('regina', 13.90), ('5 fromages', 13.90);
-
-
 INSERT INTO Client (civilite, nom, prenom, e_mail, numero_telephone, mot_de_passe)
 VALUES ('M', 'Banane', 'Jonas', 'j.banane@hotmail.fr', '0601020304', 'banane93'),
 ('M', 'Zuki', 'Mika', 'm.zuki@hotmail.fr', '0612345678', 'pgmdu77.'),
 ('M', 'Lee', 'Mira', 'm.lee@hotmail.fr', '0611223344', 'blabla28');
+
+INSERT INTO Adresse (client_id, voie, code_postal, ville)
+VALUES (1, '20 rue de la maison verte', 75008, 'Paris'),
+(2, '5 rue de la Vallée', 75014, "Paris"),
+(3, '9 avenue des Poirreaux', 75020, 'Paris');
 
 INSERT INTO Restaurant (nom, adresse_voie, adresse_code_postal, adresse_ville)
 VALUES ('OC pizza Nord', '12 rue du Général Leclerc', '75008', 'Paris'),
@@ -21,17 +14,22 @@ VALUES ('OC pizza Nord', '12 rue du Général Leclerc', '75008', 'Paris'),
 ('OC pizza Est', '8 rue des jardins', '75020', 'Paris'),
 ('OC pizza Ouest', '20 rue de la Reine', '75006', 'Paris');
 
-INSERT INTO Adresse (client_id, voie, code_postal, ville)
-VALUES ('20 rue de la maison verte', 75008, 'Paris'),
-('5 rue de la Vallée', 75014, "Paris"),
-('9 avenue des Poirreaux', 75020, 'Paris');
+INSERT INTO Employe (restaurant_id, civilite, nom, prenom, numero_telephone, grade)
+VALUES (3, 'Mme', 'Jardin', 'Anais', '0627954368', 'serveur'),
+(3, 'M', 'Tartanpion', 'Max', '0654793158', 'Manager'),
+(3, 'M', 'Patate', 'Jack', '0647958631', 'Cuisinier'),
+(3, 'Mme', 'Velo', 'Ema', '0612358496', 'Livreur');
 
-INSERT INTO Employe (civilite, nom, prenom, numero_telephone, grade)
-VALUES ('Mme', 'Jardin', 'Anais', '0627954368', 'serveur'),
-('M', 'Tartanpion', 'Max', '0654793158', 'Manager'),
-('M', 'Patate', 'Jack', '0647958631', 'Cuisinier'),
-('Mme', 'Velo', 'Ema', '0612358496', 'Livreur');
+INSERT INTO Pizza (nom, prix)
+VALUES ('margharita', 8.90), ('napolitaine', 9.90),
+('quattro staggioni', 10.90), ('matador', 10.90),
+('boursin', 10.90), ('regina', 10.90), ('5 fromages', 10.90);
 
+INSERT INTO Ingredient (nom, unite)
+VALUES ('sauce tomate', 'centilitre'), ('mozzarella', 'gramme'), ('olives noires', 'unite'), ('roquette', 'gramme'),
+('anchois', 'gramme'), ('câpres', 'gramme'), ('jambon', 'unite'), ('champignons', 'gramme'), ('artichauds marinés', 'gramme'),
+('chorizo', 'unite'), ('merguez', 'unite'), ('oignons rouges', 'unite'), ('piments vinaigrés', 'gramme'),
+('viandes hachées', 'gramme'), ('boursin', 'gramme'), ('chèvre', 'gramme'), ('bleu', 'gramme'), ('raclette', 'gramme'), ('emmental', 'gramme');
 
 INSERT INTO IngredientPizza (pizza_id, ingredient_id, quantite)
 VALUES (1, 1, 20), (1, 2, 100), (1, 3, 5), (1, 4, 20),
@@ -60,13 +58,22 @@ VALUES (1, 1, 100, 'bouteille'), (1, 2, 100, 'paquet'), (1, 3, 80, 'boite'), (1,
 (4, 10, 100, 'paquet'), (4, 11, 100, 'paquet'), (4, 12, 100, 'sachet'), (4, 13, 70, 'boite'), (4, 14, 60, 'paquet'),
 (4, 15, 40, 'paquet'), (4, 16, 300, 'paquet'), (4, 17, 300, 'paquet'), (4, 18, 300, 'paquet'), (4, 19, 300, 'paquet');
 
-INSERT INTO Commande (restaurant_id, date_commande, statut, prix_total, type, paiement_id)
-VALUES (3,'2020-09-27 11:50:00', 'en_preparation', '25,8', 'sur_place', NULL),
-(1, '2020-09-27 12:30:00', 'en_livraison', '27,8', 'en_ligne', 1),
-(2, '2020-09-27 12:45:00', 'livree', '13,90', 'en ligne', 2);
+INSERT INTO Paiement (type, date_paiement)
+VALUES ('en_ligne', '2020-09-27 12:30:00'), ('a_la_livraison', '2020-09-27 13:15:00');
+
+INSERT INTO Commande (restaurant_id, paiement_id, date_commande, statut, prix_total, type)
+VALUES (3, NULL, '2020-09-27 11:50:00', 'en_preparation', 22.80, 'sur_place'),
+(1, 1, '2020-09-27 12:30:00', 'en_livraison', 27.80, 'en_ligne'),
+(2, 2, '2020-09-27 12:45:00', 'livree', 16.90, 'en_ligne');
+
+INSERT INTO DetailCommande (pizza_id, commande_id, quantite, taille, prix)
+VALUES (1, 1, 1, 'S', 8.90), (6, 1, 1, 'M', 13.90),
+(7, 2, 1, 'M', 27.80),
+(4, 3, 1, 'L', 16.90);
 
 INSERT INTO CommandeSurPlace (parent_id, employe_id)
-VALUES (1, 1)
+VALUES (1, 1);
 
 INSERT INTO CommandeWeb (parent_id, adresse_id, client_id)
-VALUES (2, )
+VALUES (2, 1, 1), (3, 2, 2);
+

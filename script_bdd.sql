@@ -12,22 +12,9 @@ CREATE  TABLE Client (
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE  TABLE Employe (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    restaurant_id INT UNSIGNED NOT NULL,
-    civilite ENUM('M', 'Mme') NOT NULL,
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50) NOT NULL,
-    numero_telephone VARCHAR(20) NOT NULL,
-    grade ENUM('manager', 'cuisinier', 'serveur', 'livreur') NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id)
-    )
-    ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE Adresse (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    client_id UNSIGNED NOT NULL,
+    client_id INT UNSIGNED NOT NULL,
     voie VARCHAR(50) NOT NULL,
     complement_adresse VARCHAR(50),
     code_postal VARCHAR(10) NOT NULL,
@@ -45,6 +32,19 @@ CREATE TABLE Restaurant (
     adresse_code_postal VARCHAR(10) NOT NULL,
     adresse_ville VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE  TABLE Employe (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    restaurant_id INT UNSIGNED NOT NULL,
+    civilite ENUM('M', 'Mme') NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    numero_telephone VARCHAR(20) NOT NULL,
+    grade ENUM('manager', 'cuisinier', 'serveur', 'livreur') NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -79,8 +79,8 @@ CREATE TABLE Commande (
     date_commande DATETIME NOT NULL,
     statut ENUM('en_attente', 'en_preparation', 'preparee', 'en_livraison', 'livree', 'servi') NOT NULL,
     prix_total DECIMAL(5, 2) NOT NULL,
-    type ENUM("sur_place", "en_ligne")
-    PRIMARY KEY (id)
+    type ENUM("sur_place", "en_ligne"),
+    PRIMARY KEY (id),
     FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id),
     FOREIGN KEY (paiement_id) REFERENCES Paiement(id)
     )
@@ -112,7 +112,7 @@ CREATE TABLE DetailCommande (
     quantite INT NOT NULL,
     taille ENUM('S', 'M', 'L') NOT NULL,
     prix DECIMAL(5,2) NOT NULL,
-    PRIMARY KEY (pizza_id, commande_web_id),
+    PRIMARY KEY (pizza_id, commande_id),
     FOREIGN KEY (pizza_id) REFERENCES Pizza(id),
     FOREIGN KEY (commande_id) REFERENCES Commande(id)
     )
