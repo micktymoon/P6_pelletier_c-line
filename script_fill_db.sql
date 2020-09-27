@@ -42,7 +42,7 @@ VALUES (1, 1, 20), (1, 2, 100), (1, 3, 5), (1, 4, 20),
 
 INSERT INTO Stock (restaurant_id, ingredient_id, quantite, unite)
 VALUES (1, 1, 100, 'bouteille'), (1, 2, 100, 'paquet'), (1, 3, 80, 'boite'), (1, 4, 50, 'sachet'),
-(1, 5, 50, 'boite'), (1, 6, 40, 'boite'), (1, 7, 100, 'paquet'), (1, 8, 100, 'boite'), (1, 9, 50, 'boite'),
+(1, 5, 0, 'boite'), (1, 6, 40, 'boite'), (1, 7, 100, 'paquet'), (1, 8, 100, 'boite'), (1, 9, 50, 'boite'),
 (1, 10, 80, 'paquet'), (1, 11, 80, 'paquet'), (1, 12, 80, 'sachet'), (1, 13, 70, 'boite'), (1, 14, 60, 'paquet'),
 (1, 15, 40, 'paquet'), (1, 16, 90, 'paquet'), (1, 17, 90, 'paquet'), (1, 18, 90, 'paquet'), (1, 19, 90, 'paquet'),
 (2, 1, 130, 'bouteille'), (2, 2, 130, 'paquet'), (2, 3, 100, 'boite'), (2, 4, 80, 'sachet'),
@@ -68,7 +68,7 @@ VALUES (3, NULL, '2020-09-27 11:50:00', 'en_preparation', 22.80, 'sur_place'),
 
 INSERT INTO DetailCommande (pizza_id, commande_id, quantite, taille, prix)
 VALUES (1, 1, 1, 'S', 8.90), (6, 1, 1, 'M', 13.90),
-(7, 2, 1, 'M', 27.80),
+(7, 2, 2, 'M', 27.80),
 (4, 3, 1, 'L', 16.90);
 
 INSERT INTO CommandeSurPlace (parent_id, employe_id)
@@ -77,3 +77,15 @@ VALUES (1, 1);
 INSERT INTO CommandeWeb (parent_id, adresse_id, client_id)
 VALUES (2, 1, 1), (3, 2, 2);
 
+INSERT INTO Commande (restaurant_id, paiement_id, date_commande, statut, prix_total, type)
+VALUES (3, NULL, '2020-09-27 11:50:00', 'en_attente', 22.80, 'en_ligne');
+
+INSERT INTO CommandeWeb (parent_id, adresse_id, client_id)
+VALUES (4, 1, 1);
+
+INSERT INTO Adresse (client_id, voie, code_postal, ville)
+VALUES (1, '50 rue de la maison bleue', 75008, 'Paris');
+
+UPDATE Pizza
+SET prix=9.50
+WHERE Pizza.id = 1;
