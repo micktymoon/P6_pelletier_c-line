@@ -15,8 +15,8 @@ CREATE  TABLE Client (
 CREATE TABLE Adresse (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     client_id INT UNSIGNED NOT NULL,
-    voie VARCHAR(50) NOT NULL,
-    complement_adresse VARCHAR(50),
+    voie VARCHAR(150) NOT NULL,
+    complement_adresse VARCHAR(150),
     code_postal VARCHAR(10) NOT NULL,
     ville VARCHAR(50) NOT NULL,
     PRIMARY KEY (id),
@@ -27,8 +27,8 @@ CREATE TABLE Adresse (
 CREATE TABLE Restaurant (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     nom VARCHAR(50) NOT NULL,
-    adresse_voie VARCHAR(50) NOT NULL,
-    adresse_complement VARCHAR(50),
+    adresse_voie VARCHAR(150) NOT NULL,
+    adresse_complement VARCHAR(150),
     adresse_code_postal VARCHAR(10) NOT NULL,
     adresse_ville VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
@@ -52,6 +52,8 @@ CREATE TABLE Paiement (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     type ENUM('sur_place', 'a_la_livraison', 'en_ligne') NOT NULL,
     date_paiement DATETIME NOT NULL,
+    numero_facture VARCHAR(50) NOT NULL,
+    mode_paiement ENUM('cb', 'espece', 'paypal', 'autre') NOT NULL,
     PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -77,9 +79,6 @@ CREATE TABLE Commande (
     restaurant_id INT UNSIGNED NOT NULL,
     paiement_id INT UNSIGNED,
     date_commande DATETIME NOT NULL,
-    statut ENUM('en_attente', 'en_preparation', 'preparee', 'en_livraison', 'livree', 'servi') NOT NULL,
-    prix_total DECIMAL(5, 2) NOT NULL,
-    type ENUM("sur_place", "en_ligne"),
     PRIMARY KEY (id),
     FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id),
     FOREIGN KEY (paiement_id) REFERENCES Paiement(id)
@@ -90,6 +89,7 @@ CREATE TABLE CommandeWeb (
     parent_id INT UNSIGNED NOT NULL,
     adresse_id INT UNSIGNED NOT NULL,
     client_id INT UNSIGNED NOT NULL,
+    statut ENUM('en_attente', 'en_preparation', 'preparee', 'en_livraison', 'livree', 'annulee') NOT NULL,
     PRIMARY KEY (parent_id),
     FOREIGN KEY (parent_id) REFERENCES Commande(id),
     FOREIGN KEY (adresse_id) REFERENCES Adresse(id),
@@ -100,6 +100,7 @@ CREATE TABLE CommandeWeb (
 CREATE TABLE CommandeSurPlace (
     parent_id INT UNSIGNED NOT NULL,
     employe_id INT UNSIGNED NOT NULL,
+    statut ENUM('en_attente', 'en_preparation', 'preparee', 'servi', 'annulee') NOT NULL,
     PRIMARY KEY (parent_id),
     FOREIGN KEY (parent_id) REFERENCES Commande(id),
     FOREIGN KEY (employe_id) REFERENCES Employe(id)
