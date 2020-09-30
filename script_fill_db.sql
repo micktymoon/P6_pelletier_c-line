@@ -58,30 +58,34 @@ VALUES (1, 1, 100, 'bouteille'), (1, 2, 100, 'paquet'), (1, 3, 80, 'boite'), (1,
 (4, 10, 100, 'paquet'), (4, 11, 100, 'paquet'), (4, 12, 100, 'sachet'), (4, 13, 70, 'boite'), (4, 14, 60, 'paquet'),
 (4, 15, 40, 'paquet'), (4, 16, 300, 'paquet'), (4, 17, 300, 'paquet'), (4, 18, 300, 'paquet'), (4, 19, 300, 'paquet');
 
-INSERT INTO Paiement (type, date_paiement)
-VALUES ('en_ligne', '2020-09-27 12:30:00'), ('a_la_livraison', '2020-09-27 13:15:00');
+INSERT INTO Paiement (type, date_paiement, numero_facture, mode_paiement)
+VALUES ('en_ligne', '2020-09-27 12:30:00', 'F200927003', 'cb'),
+('a_la_livraison', '2020-09-27 13:15:00', 'F200927006', 'espece');
 
-INSERT INTO Commande (restaurant_id, paiement_id, date_commande, statut, prix_total, type)
-VALUES (3, NULL, '2020-09-27 11:50:00', 'en_preparation', 22.80, 'sur_place'),
-(1, 1, '2020-09-27 12:30:00', 'en_livraison', 27.80, 'en_ligne'),
-(2, 2, '2020-09-27 12:45:00', 'livree', 16.90, 'en_ligne');
+INSERT INTO Commande (restaurant_id, paiement_id, date_commande)
+VALUES (3, NULL, '2020-09-27 11:50:00'),
+(1, 1, '2020-09-27 12:30:00'),
+(2, 2, '2020-09-27 12:45:00');
+
+INSERT INTO CommandeSurPlace (parent_id, employe_id, statut)
+VALUES (1, 1, 'en_preparation');
+
+INSERT INTO CommandeWeb (parent_id, adresse_id, client_id, statut)
+VALUES (2, 1, 1, 'en_livraison'), (3, 2, 2, 'livree');
 
 INSERT INTO DetailCommande (pizza_id, commande_id, quantite, taille, prix)
 VALUES (1, 1, 1, 'S', 8.90), (6, 1, 1, 'M', 13.90),
 (7, 2, 2, 'M', 27.80),
 (4, 3, 1, 'L', 16.90);
 
-INSERT INTO CommandeSurPlace (parent_id, employe_id)
-VALUES (1, 1);
+INSERT INTO Commande (restaurant_id, paiement_id, date_commande)
+VALUES (3, NULL, '2020-09-27 13:50:00');
 
-INSERT INTO CommandeWeb (parent_id, adresse_id, client_id)
-VALUES (2, 1, 1), (3, 2, 2);
+INSERT INTO CommandeWeb (parent_id, adresse_id, client_id, statut)
+VALUES (4, 1, 1, 'en_attente');
 
-INSERT INTO Commande (restaurant_id, paiement_id, date_commande, statut, prix_total, type)
-VALUES (3, NULL, '2020-09-27 11:50:00', 'en_attente', 22.80, 'en_ligne');
-
-INSERT INTO CommandeWeb (parent_id, adresse_id, client_id)
-VALUES (4, 1, 1);
+INSERT INTO DetailCommande (pizza_id, commande_id, quantite, taille, prix)
+VALUES (5, 1, 4, 'S', 10.90);
 
 INSERT INTO Adresse (client_id, voie, code_postal, ville)
 VALUES (1, '50 rue de la maison bleue', 75008, 'Paris');

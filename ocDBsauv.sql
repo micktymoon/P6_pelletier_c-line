@@ -25,14 +25,14 @@ DROP TABLE IF EXISTS `Adresse`;
 CREATE TABLE `Adresse` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `client_id` int unsigned NOT NULL,
-  `voie` varchar(50) NOT NULL,
-  `complement_adresse` varchar(50) DEFAULT NULL,
+  `voie` varchar(150) NOT NULL,
+  `complement_adresse` varchar(150) DEFAULT NULL,
   `code_postal` varchar(10) NOT NULL,
   `ville` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   CONSTRAINT `Adresse_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `Client` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `Adresse` (
 
 LOCK TABLES `Adresse` WRITE;
 /*!40000 ALTER TABLE `Adresse` DISABLE KEYS */;
-INSERT INTO `Adresse` VALUES (1,1,'20 rue de la maison verte',NULL,'75008','Paris'),(2,2,'5 rue de la Vallée',NULL,'75014','Paris'),(3,3,'9 avenue des Poirreaux',NULL,'75020','Paris');
+INSERT INTO `Adresse` VALUES (1,1,'20 rue de la maison verte',NULL,'75008','Paris'),(2,2,'5 rue de la Vallée',NULL,'75014','Paris'),(3,3,'9 avenue des Poirreaux',NULL,'75020','Paris'),(4,1,'50 rue de la maison bleue',NULL,'75008','Paris');
 /*!40000 ALTER TABLE `Adresse` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,15 +86,12 @@ CREATE TABLE `Commande` (
   `restaurant_id` int unsigned NOT NULL,
   `paiement_id` int unsigned DEFAULT NULL,
   `date_commande` datetime NOT NULL,
-  `statut` enum('en_attente','en_preparation','preparee','en_livraison','livree','servi') NOT NULL,
-  `prix_total` decimal(5,2) NOT NULL,
-  `type` enum('sur_place','en_ligne') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `restaurant_id` (`restaurant_id`),
   KEY `paiement_id` (`paiement_id`),
   CONSTRAINT `Commande_ibfk_1` FOREIGN KEY (`restaurant_id`) REFERENCES `Restaurant` (`id`),
   CONSTRAINT `Commande_ibfk_2` FOREIGN KEY (`paiement_id`) REFERENCES `Paiement` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +100,7 @@ CREATE TABLE `Commande` (
 
 LOCK TABLES `Commande` WRITE;
 /*!40000 ALTER TABLE `Commande` DISABLE KEYS */;
-INSERT INTO `Commande` VALUES (1,3,NULL,'2020-09-27 11:50:00','en_preparation',22.80,'sur_place'),(2,1,1,'2020-09-27 12:30:00','en_livraison',27.80,'en_ligne'),(3,2,2,'2020-09-27 12:45:00','livree',16.90,'en_ligne');
+INSERT INTO `Commande` VALUES (1,3,NULL,'2020-09-27 11:50:00'),(2,1,1,'2020-09-27 12:30:00'),(3,2,2,'2020-09-27 12:45:00'),(4,3,NULL,'2020-09-27 13:50:00');
 /*!40000 ALTER TABLE `Commande` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,6 +114,7 @@ DROP TABLE IF EXISTS `CommandeSurPlace`;
 CREATE TABLE `CommandeSurPlace` (
   `parent_id` int unsigned NOT NULL,
   `employe_id` int unsigned NOT NULL,
+  `statut` enum('en_attente','en_preparation','preparee','servi','annulee') NOT NULL,
   PRIMARY KEY (`parent_id`),
   KEY `employe_id` (`employe_id`),
   CONSTRAINT `CommandeSurPlace_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `Commande` (`id`),
@@ -130,7 +128,7 @@ CREATE TABLE `CommandeSurPlace` (
 
 LOCK TABLES `CommandeSurPlace` WRITE;
 /*!40000 ALTER TABLE `CommandeSurPlace` DISABLE KEYS */;
-INSERT INTO `CommandeSurPlace` VALUES (1,1);
+INSERT INTO `CommandeSurPlace` VALUES (1,1,'en_preparation');
 /*!40000 ALTER TABLE `CommandeSurPlace` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,6 +143,7 @@ CREATE TABLE `CommandeWeb` (
   `parent_id` int unsigned NOT NULL,
   `adresse_id` int unsigned NOT NULL,
   `client_id` int unsigned NOT NULL,
+  `statut` enum('en_attente','en_preparation','preparee','en_livraison','livree','annulee') NOT NULL,
   PRIMARY KEY (`parent_id`),
   KEY `adresse_id` (`adresse_id`),
   KEY `client_id` (`client_id`),
@@ -160,7 +159,7 @@ CREATE TABLE `CommandeWeb` (
 
 LOCK TABLES `CommandeWeb` WRITE;
 /*!40000 ALTER TABLE `CommandeWeb` DISABLE KEYS */;
-INSERT INTO `CommandeWeb` VALUES (2,1,1),(3,2,2);
+INSERT INTO `CommandeWeb` VALUES (2,1,1,'en_livraison'),(3,2,2,'livree'),(4,1,1,'en_attente');
 /*!40000 ALTER TABLE `CommandeWeb` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,7 +189,7 @@ CREATE TABLE `DetailCommande` (
 
 LOCK TABLES `DetailCommande` WRITE;
 /*!40000 ALTER TABLE `DetailCommande` DISABLE KEYS */;
-INSERT INTO `DetailCommande` VALUES (1,1,1,'S',8.90),(4,3,1,'L',16.90),(6,1,1,'M',13.90),(7,2,1,'M',27.80);
+INSERT INTO `DetailCommande` VALUES (1,1,1,'S',8.90),(4,3,1,'L',16.90),(5,1,4,'S',10.90),(6,1,1,'M',13.90),(7,2,2,'M',27.80);
 /*!40000 ALTER TABLE `DetailCommande` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,6 +288,8 @@ CREATE TABLE `Paiement` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('sur_place','a_la_livraison','en_ligne') NOT NULL,
   `date_paiement` datetime NOT NULL,
+  `numero_facture` varchar(50) NOT NULL,
+  `mode_paiement` enum('cb','espece','paypal','autre') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -299,7 +300,7 @@ CREATE TABLE `Paiement` (
 
 LOCK TABLES `Paiement` WRITE;
 /*!40000 ALTER TABLE `Paiement` DISABLE KEYS */;
-INSERT INTO `Paiement` VALUES (1,'en_ligne','2020-09-27 12:30:00'),(2,'a_la_livraison','2020-09-27 13:15:00');
+INSERT INTO `Paiement` VALUES (1,'en_ligne','2020-09-27 12:30:00','F200927003','cb'),(2,'a_la_livraison','2020-09-27 13:15:00','F200927006','espece');
 /*!40000 ALTER TABLE `Paiement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,7 +325,7 @@ CREATE TABLE `Pizza` (
 
 LOCK TABLES `Pizza` WRITE;
 /*!40000 ALTER TABLE `Pizza` DISABLE KEYS */;
-INSERT INTO `Pizza` VALUES (1,'margharita',8.90),(2,'napolitaine',9.90),(3,'quattro staggioni',10.90),(4,'matador',10.90),(5,'boursin',10.90),(6,'regina',10.90),(7,'5 fromages',10.90);
+INSERT INTO `Pizza` VALUES (1,'margharita',9.50),(2,'napolitaine',9.90),(3,'quattro staggioni',10.90),(4,'matador',10.90),(5,'boursin',10.90),(6,'regina',10.90),(7,'5 fromages',10.90);
 /*!40000 ALTER TABLE `Pizza` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,8 +339,8 @@ DROP TABLE IF EXISTS `Restaurant`;
 CREATE TABLE `Restaurant` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `nom` varchar(50) NOT NULL,
-  `adresse_voie` varchar(50) NOT NULL,
-  `adresse_complement` varchar(50) DEFAULT NULL,
+  `adresse_voie` varchar(150) NOT NULL,
+  `adresse_complement` varchar(150) DEFAULT NULL,
   `adresse_code_postal` varchar(10) NOT NULL,
   `adresse_ville` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
@@ -381,7 +382,7 @@ CREATE TABLE `Stock` (
 
 LOCK TABLES `Stock` WRITE;
 /*!40000 ALTER TABLE `Stock` DISABLE KEYS */;
-INSERT INTO `Stock` VALUES (1,1,100,'bouteille'),(1,2,100,'paquet'),(1,3,80,'boite'),(1,4,50,'sachet'),(1,5,50,'boite'),(1,6,40,'boite'),(1,7,100,'paquet'),(1,8,100,'boite'),(1,9,50,'boite'),(1,10,80,'paquet'),(1,11,80,'paquet'),(1,12,80,'sachet'),(1,13,70,'boite'),(1,14,60,'paquet'),(1,15,40,'paquet'),(1,16,90,'paquet'),(1,17,90,'paquet'),(1,18,90,'paquet'),(1,19,90,'paquet'),(2,1,130,'bouteille'),(2,2,130,'paquet'),(2,3,100,'boite'),(2,4,80,'sachet'),(2,5,100,'boite'),(2,6,80,'boite'),(2,7,150,'paquet'),(2,8,150,'boite'),(2,9,70,'boite'),(2,10,100,'paquet'),(2,11,100,'paquet'),(2,12,100,'sachet'),(2,13,70,'boite'),(2,14,60,'paquet'),(2,15,40,'paquet'),(2,16,150,'paquet'),(2,17,150,'paquet'),(2,18,150,'paquet'),(2,19,150,'paquet'),(3,1,200,'bouteille'),(3,2,200,'paquet'),(3,3,200,'boite'),(3,4,80,'sachet'),(3,5,70,'boite'),(3,6,50,'boite'),(3,7,250,'paquet'),(3,8,250,'boite'),(3,9,70,'boite'),(3,10,100,'paquet'),(3,11,100,'paquet'),(3,12,100,'sachet'),(3,13,70,'boite'),(3,14,60,'paquet'),(3,15,40,'paquet'),(3,16,300,'paquet'),(3,17,300,'paquet'),(3,18,300,'paquet'),(3,19,300,'paquet'),(4,1,200,'bouteille'),(4,2,200,'paquet'),(4,3,200,'boite'),(4,4,80,'sachet'),(4,5,70,'boite'),(4,6,50,'boite'),(4,7,250,'paquet'),(4,8,250,'boite'),(4,9,70,'boite'),(4,10,100,'paquet'),(4,11,100,'paquet'),(4,12,100,'sachet'),(4,13,70,'boite'),(4,14,60,'paquet'),(4,15,40,'paquet'),(4,16,300,'paquet'),(4,17,300,'paquet'),(4,18,300,'paquet'),(4,19,300,'paquet');
+INSERT INTO `Stock` VALUES (1,1,100,'bouteille'),(1,2,100,'paquet'),(1,3,80,'boite'),(1,4,50,'sachet'),(1,5,0,'boite'),(1,6,40,'boite'),(1,7,100,'paquet'),(1,8,100,'boite'),(1,9,50,'boite'),(1,10,80,'paquet'),(1,11,80,'paquet'),(1,12,80,'sachet'),(1,13,70,'boite'),(1,14,60,'paquet'),(1,15,40,'paquet'),(1,16,90,'paquet'),(1,17,90,'paquet'),(1,18,90,'paquet'),(1,19,90,'paquet'),(2,1,130,'bouteille'),(2,2,130,'paquet'),(2,3,100,'boite'),(2,4,80,'sachet'),(2,5,100,'boite'),(2,6,80,'boite'),(2,7,150,'paquet'),(2,8,150,'boite'),(2,9,70,'boite'),(2,10,100,'paquet'),(2,11,100,'paquet'),(2,12,100,'sachet'),(2,13,70,'boite'),(2,14,60,'paquet'),(2,15,40,'paquet'),(2,16,150,'paquet'),(2,17,150,'paquet'),(2,18,150,'paquet'),(2,19,150,'paquet'),(3,1,200,'bouteille'),(3,2,200,'paquet'),(3,3,200,'boite'),(3,4,80,'sachet'),(3,5,70,'boite'),(3,6,50,'boite'),(3,7,250,'paquet'),(3,8,250,'boite'),(3,9,70,'boite'),(3,10,100,'paquet'),(3,11,100,'paquet'),(3,12,100,'sachet'),(3,13,70,'boite'),(3,14,60,'paquet'),(3,15,40,'paquet'),(3,16,300,'paquet'),(3,17,300,'paquet'),(3,18,300,'paquet'),(3,19,300,'paquet'),(4,1,200,'bouteille'),(4,2,200,'paquet'),(4,3,200,'boite'),(4,4,80,'sachet'),(4,5,70,'boite'),(4,6,50,'boite'),(4,7,250,'paquet'),(4,8,250,'boite'),(4,9,70,'boite'),(4,10,100,'paquet'),(4,11,100,'paquet'),(4,12,100,'sachet'),(4,13,70,'boite'),(4,14,60,'paquet'),(4,15,40,'paquet'),(4,16,300,'paquet'),(4,17,300,'paquet'),(4,18,300,'paquet'),(4,19,300,'paquet');
 /*!40000 ALTER TABLE `Stock` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -394,4 +395,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-27 17:39:32
+-- Dump completed on 2020-09-30 16:14:08
