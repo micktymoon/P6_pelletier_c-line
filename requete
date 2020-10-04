@@ -27,21 +27,27 @@ WHERE Restaurant.id = 1 AND Stock.quantite < 1;
 
 SELECT Pizza.nom, DetailCommande.quantite
 FROM Pizza
-INNER JOIN DetailCommande ON DetailCommande.pizza_id = Pizza.id
+INNER JOIN PizzaTaille ON PizzaTaille.pizza_id = Pizza.id
+INNER JOIN DetailCommande ON DetailCommande.pizza_taille_id = PizzaTaille.id
 WHERE DetailCommande.commande_id = 1;
 
 -- retrouver commande en attente dans un restaurant
 
-SELECT Commande.id
+SELECT Commande.id, Commande.restaurant_id, CommandeSurPlace.statut
 FROM Commande
-WHERE restaurant_id = 3 AND statut IN ('en_attente');
+INNER JOIN CommandeSurPlace ON CommandeSurPlace.parent_id = Commande.id
+WHERE CommandeSurPlace.statut LIKE 'en_attente';
+
+SELECT Commande.id, Commande.restaurant_id, CommandeWeb.statut
+FROM Commande
+INNER JOIN CommandeWeb ON CommandeWeb.parent_id = Commande.id
+WHERE CommandeWeb.statut LIKE 'en_attente';
 
 -- retrouver les commandes en attente d'un client
 
-SELECT Commande.id
-FROM Commande
-INNER JOIN CommandeWeb ON CommandeWeb.parent_id = Commande.id
-WHERE CommandeWeb.client_id = 1 AND statut IN ('en_attente');
+SELECT parent_id
+FROM CommandeWeb
+WHERE client_id = 5 AND statut IN ('en_attente');
 
 -- retrouver l'adresse d'une commande après livraison mm si le client à changé d'adresse.
 
@@ -56,4 +62,4 @@ WHERE Commande.id = 2;
 SELECT DetailCommande.prix
 FROM DetailCommande
 INNER JOIN Commande ON Commande.id = DetailCommande.commande_id
-WHERE Commande.id = 1 AND DetailCommande.pizza_id = 1;
+WHERE Commande.id = 1 AND DetailCommande.pizza_taille_id = 1;

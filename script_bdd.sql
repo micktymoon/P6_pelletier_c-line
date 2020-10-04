@@ -1,14 +1,22 @@
 CREATE DATABASE ocPizza;
 USE ocPizza;
-CREATE  TABLE Client (
+
+CREATE TABLE Users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     civilite ENUM('M', 'Mme') NOT NULL,
     nom VARCHAR(50) NOT NULL,
     prenom VARCHAR(50) NOT NULL,
-    e_mail VARCHAR(320) NOT NULL,
     numero_telephone VARCHAR(20) NOT NULL,
-    mot_de_passe VARCHAR(40) CHARACTER SET ascii NOT NULL,
     PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE  TABLE Client (
+    parent_id INT UNSIGNED NOT NULL,
+    e_mail VARCHAR(320) NOT NULL,
+    mot_de_passe VARCHAR(40) CHARACTER SET ascii NOT NULL,
+    PRIMARY KEY (parent_id),
+    FOREIGN KEY (parent_id) REFERENCES Users(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -20,7 +28,7 @@ CREATE TABLE Adresse (
     code_postal VARCHAR(10) NOT NULL,
     ville VARCHAR(50) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (client_id) REFERENCES Client(id)
+    FOREIGN KEY (client_id) REFERENCES Client(parent_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -36,14 +44,11 @@ CREATE TABLE Restaurant (
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE  TABLE Employe (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    parent_id INT UNSIGNED NOT NULL,
     restaurant_id INT UNSIGNED NOT NULL,
-    civilite ENUM('M', 'Mme') NOT NULL,
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50) NOT NULL,
-    numero_telephone VARCHAR(20) NOT NULL,
     grade ENUM('manager', 'cuisinier', 'serveur', 'livreur') NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (parent_id),
+    FOREIGN KEY (parent_id) REFERENCES Users(id),
     FOREIGN KEY (restaurant_id) REFERENCES Restaurant(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -61,8 +66,17 @@ CREATE TABLE Paiement (
 CREATE TABLE Pizza (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     nom VARCHAR(50) NOT NULL,
-    prix DECIMAL(4, 2) NOT NULL,
     PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE PizzaTaille (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    pizza_id INT UNSIGNED NOT NULL,
+    taille ENUM('S', 'M', 'L') NOT NULL,
+    prix DECIMAL(4, 2) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (pizza_id) REFERENCES Pizza(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -93,7 +107,7 @@ CREATE TABLE CommandeWeb (
     PRIMARY KEY (parent_id),
     FOREIGN KEY (parent_id) REFERENCES Commande(id),
     FOREIGN KEY (adresse_id) REFERENCES Adresse(id),
-    FOREIGN KEY (client_id) REFERENCES Client(id)
+    FOREIGN KEY (client_id) REFERENCES Client(parent_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -103,18 +117,17 @@ CREATE TABLE CommandeSurPlace (
     statut ENUM('en_attente', 'en_preparation', 'preparee', 'servi', 'annulee') NOT NULL,
     PRIMARY KEY (parent_id),
     FOREIGN KEY (parent_id) REFERENCES Commande(id),
-    FOREIGN KEY (employe_id) REFERENCES Employe(id)
+    FOREIGN KEY (employe_id) REFERENCES Employe(parent_id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE DetailCommande (
-    pizza_id INT UNSIGNED NOT NULL,
+    pizza_taille_id INT UNSIGNED NOT NULL,
     commande_id INT UNSIGNED NOT NULL,
     quantite INT NOT NULL,
-    taille ENUM('S', 'M', 'L') NOT NULL,
     prix DECIMAL(5,2) NOT NULL,
-    PRIMARY KEY (pizza_id, commande_id),
-    FOREIGN KEY (pizza_id) REFERENCES Pizza(id),
+    PRIMARY KEY (pizza_taille_id, commande_id),
+    FOREIGN KEY (pizza_taille_id) REFERENCES PizzaTaille(id),
     FOREIGN KEY (commande_id) REFERENCES Commande(id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
