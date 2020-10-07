@@ -1,5 +1,5 @@
 -- requète pour avoir les ingredients d'une pizza
-SELECT Ingredient.nom
+SELECT Ingredient.nom, IngredientPizza.quantite, Ingredient.unite
 FROM Ingredient
 INNER JOIN IngredientPizza ON IngredientPizza.ingredient_id=Ingredient.id
 INNER JOIN Pizza ON Pizza.id=IngredientPizza.pizza_id
@@ -36,12 +36,12 @@ WHERE DetailCommande.commande_id = 1;
 SELECT Commande.id, Commande.restaurant_id, CommandeSurPlace.statut
 FROM Commande
 INNER JOIN CommandeSurPlace ON CommandeSurPlace.parent_id = Commande.id
-WHERE CommandeSurPlace.statut LIKE 'en_attente';
+WHERE CommandeSurPlace.statut = 'en_attente';
 
 SELECT Commande.id, Commande.restaurant_id, CommandeWeb.statut
 FROM Commande
 INNER JOIN CommandeWeb ON CommandeWeb.parent_id = Commande.id
-WHERE CommandeWeb.statut LIKE 'en_attente';
+WHERE CommandeWeb.statut = 'en_attente';
 
 -- retrouver les commandes en attente d'un client
 
